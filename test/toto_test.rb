@@ -1,4 +1,5 @@
-require 'test/test_helper'
+$LOAD_PATH << File.dirname(__FILE__)
+require 'test_helper'
 require 'date'
 
 URL = "http://toto.oz"
