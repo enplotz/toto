@@ -1,4 +1,4 @@
-# coding: utf-8
+# encoding: utf-8
 require 'yaml'
 require 'date'
 require 'erb'
@@ -33,7 +33,9 @@ module Toto
   def self.env= env
     ENV['RACK_ENV'] = env
   end
-
+  
+  Encoding.default_internal = "BINARY"
+  
   module Template
     def to_html page, config, &blk
       path = ([:layout, :repo].include?(page) ? Paths[:templates] : Paths[:pages])
@@ -229,7 +231,7 @@ module Toto
 
     def load
       data = if @obj.is_a? String
-        meta, self[:body] = File.read(@obj).split(/\n\n/, 2)
+        meta, self[:body] = File.read(@obj, :encoding => "BINARY").split(/\n\n/, 2)
 
         # use the date from the filename, or else toto won't find the article
         @obj =~ /\/(\d{4}-\d{2}-\d{2})[^\/]*$/
@@ -298,10 +300,10 @@ module Toto
       :cache => 28800,                                      # cache duration (seconds)
       :github => {:user => "", :repos => [], :ext => 'md'}, # Github username and list of repos
       :to_html => lambda {|path, page, ctx|                 # returns an html, from a path & context
-        ERB.new(File.read("#{path}/#{page}.rhtml")).result(ctx)
+        ERB.new(File.read("#{path}/#{page}.rhtml", :encoding => "BINARY")).result(ctx)
       },
       :error => lambda {|code|                              # The HTML for your error page
-        "<font style='font-size:300%'>toto, we're not in Kansas anymore (#{code})</font>"
+        "<font style='font-size:300%'>toto, we're not in Kansas anymore... Error #{code} :(</font>"
       }
     }
     def initialize obj
