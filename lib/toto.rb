@@ -34,7 +34,7 @@ module Toto
     ENV['RACK_ENV'] = env
   end
   
-  Encoding.default_internal = "utf-8"
+  Encoding.default_internal = "BINARY"
   
   module Template
     def to_html page, config, &blk
