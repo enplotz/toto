@@ -34,7 +34,7 @@ module Toto
     ENV['RACK_ENV'] = env
   end
   
-  Encoding.default_internal = "BINARY"
+  Encoding.default_internal = "utf-8"
   
   module Template
     def to_html page, config, &blk
@@ -231,7 +231,7 @@ module Toto
 
     def load
       data = if @obj.is_a? String
-        meta, self[:body] = File.read(@obj, :encoding => "BINARY").split(/\n\n/, 2)
+        meta, self[:body] = File.read(@obj, "r:utf-8:utf-8").split(/\n\n/, 2)
 
         # use the date from the filename, or else toto won't find the article
         @obj =~ /\/(\d{4}-\d{2}-\d{2})[^\/]*$/
@@ -300,7 +300,7 @@ module Toto
       :cache => 28800,                                      # cache duration (seconds)
       :github => {:user => "", :repos => [], :ext => 'md'}, # Github username and list of repos
       :to_html => lambda {|path, page, ctx|                 # returns an html, from a path & context
-        ERB.new(File.read("#{path}/#{page}.rhtml", :encoding => "BINARY")).result(ctx)
+        ERB.new(File.read("#{path}/#{page}.rhtml", "r:utf-8:utf-8")).result(ctx)
       },
       :error => lambda {|code|                              # The HTML for your error page
         "<font style='font-size:300%'>toto, we're not in Kansas anymore... Error #{code} :(</font>"
