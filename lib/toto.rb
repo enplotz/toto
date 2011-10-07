@@ -300,7 +300,7 @@ module Toto
       :cache => 28800,                                      # cache duration (seconds)
       :github => {:user => "", :repos => [], :ext => 'md'}, # Github username and list of repos
       :to_html => lambda {|path, page, ctx|                 # returns an html, from a path & context
-        ERB.new(File.read("#{path}/#{page}.rhtml", :encoding => "UTF-8" )).result(ctx).force_encoding('utf-8')
+        ERB.new(File.read("#{path}/#{page}.rhtml", :encoding => "UTF-8" )).result(ctx)
       },
       :error => lambda {|code|                              # The HTML for your error page
         "<font style='font-size:300%'>toto, we're not in Kansas anymore (#{code})</font>"
