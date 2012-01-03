@@ -81,21 +81,21 @@ module Toto
       end}.merge archives
     end
 
-    def archives filter = "", tag = nil
+    def archives filter = "", category = nil
       entries = ! self.articles.empty??
         self.articles.select do |a|
           filter !~ /^\d{4}/ || File.basename(a) =~ /^#{filter}/
         end.reverse.map do |article|
           Article.new article, @config
         end : []
-      if tag.nil?
+      if category.nil?
         { :archives => Archives.new(entries, @config) }
       else
-        tagged = entries.select do |article|
-          article_tags = article[:tag]
-          article_tags && article_tags.slugize == tag
+        categorized = entries.select do |article|
+          article_categories = article[:category]
+          article_categories && article_categories.slugize == category
         end
-        { :tag => tagged.first[:tag], :archives => tagged } if tagged.size > 0
+        { :category => categorized.first[:category], :archives => categorized } if categorized.size > 0
       end
     end
 
@@ -124,11 +124,11 @@ module Toto
             else http 400
           end
           
-        elsif route.first == 'tags' && route.size == 2
+        elsif route.first == 'category' && route.size == 2
           if (data = archives('', route[1])).nil?
             http 404
           else
-            context[data, :tag]
+            context[data, :category]
           end
           
         elsif respond_to?(path)
