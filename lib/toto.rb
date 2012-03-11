@@ -33,9 +33,9 @@ module Toto
   def self.env= env
     ENV['RACK_ENV'] = env
   end
-  
+
   Encoding.default_internal = "UTF-8"
-    
+
   module Template
     def to_html page, config, &blk
       path = ([:layout, :repo].include?(page) ? Paths[:templates] : Paths[:pages])
@@ -123,14 +123,14 @@ module Toto
               context[article(route), :article]
             else http 400
           end
-          
+
         elsif route.first == 'category' && route.size == 2
           if (data = archives('', route[1])).nil?
             http 404
           else
             context[data, :category]
           end
-          
+
         elsif respond_to?(path)
           context[send(path, type), path.to_sym]
         elsif (repo = @config[:github][:repos].grep(/#{path}/).first) &&
@@ -295,6 +295,7 @@ module Toto
 
     def title()   self[:title] || "an article"               end
     def date()    @config[:date].call(self[:date])           end
+    def category() self[:category] || "category"             end
     def author()  self[:author] || @config[:author]          end
     def to_html() self.load; super(:article, @config)        end
     alias :to_s to_html
