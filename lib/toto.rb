@@ -293,6 +293,12 @@ module Toto
       "/#{@config[:prefix]}#{self[:date].strftime("/%Y/%m/%d/#{slug}/")}".squeeze('/')
     end
 
+    # a simple metadata method that tries to catch the given metadata out of the files yaml
+    def metadata name
+      self[:"#{name}"] || nil
+    end
+
+
     def title()   self[:title] || "an article"               end
     def date()    @config[:date].call(self[:date])           end
     def author()  self[:author] || @config[:author]          end
