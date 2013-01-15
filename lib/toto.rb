@@ -303,6 +303,7 @@ module Toto
     def date()    @config[:date].call(self[:date])           end
     def author()  self[:author] || @config[:author]          end
     def category() self[:category] || "category"             end
+    def linked() self[:linked] || ""                         end
     def to_html() self.load; super(:article, @config)        end
     alias :to_s to_html
   end
